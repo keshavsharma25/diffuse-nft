@@ -9,7 +9,8 @@ To create NFTs using stable diffusion images and NFT.storage, you will need to f
 - Use the NFT.storage platform to mint a new NFT from the stable diffusion image. (Have written the smart contract but still NFT.storage was still left, got stuck in fixing some errors which a lot more time then was expected).
 
 Frontend Snap-
-![image](https://user-images.githubusercontent.com/76066586/205475810-84f81591-4c19-4b92-a69d-73dfb36a2629.png)
+![image](https://user-images.githubusercontent.com/76066586/205475883-a59e8f6a-22e2-493a-974e-527d29c7ab2e.png)
+
 
 Exposed APIs -
 
