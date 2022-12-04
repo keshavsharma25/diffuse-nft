@@ -11,8 +11,9 @@ To create NFTs using stable diffusion images and NFT.storage, you will need to f
 Frontend Snap-
 ![image](https://user-images.githubusercontent.com/76066586/205475810-84f81591-4c19-4b92-a69d-73dfb36a2629.png)
 
-
 Exposed APIs -
 
 - /api/generate - Generates and queues the given prompt to generate images
 - /api/check - checks the status of the queues and returns the image urls once generated
+
+NFT Contract - [Link](packages/backend/contracts/DiffusionNFT.sol)
