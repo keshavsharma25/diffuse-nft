@@ -20,4 +20,4 @@ Exposed APIs -
 NFT Contract - [Link](packages/backend/contracts/DiffusionNFT.sol)
 
 
-Was not able to create a live app but will surely complete it. Thanks for the amazing Hackathon.
+Was not able to create a live app but will surely complete it.
