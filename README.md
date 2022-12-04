@@ -18,3 +18,6 @@ Exposed APIs -
 - /api/check - checks the status of the queues and returns the image urls once generated
 
 NFT Contract - [Link](packages/backend/contracts/DiffusionNFT.sol)
+
+
+Was not able to create a live app but will surely complete it. Thanks for the amazing Hackathon.
