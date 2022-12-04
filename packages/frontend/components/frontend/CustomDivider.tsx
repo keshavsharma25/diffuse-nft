@@ -3,7 +3,7 @@ import React from "react";
 
 type Props = {};
 
-const CustomDivider = (props: Props) => {
+export const CustomDivider = (props: Props) => {
   return (
     <Flex
       style={{
@@ -13,6 +13,9 @@ const CustomDivider = (props: Props) => {
       opacity={0.5}
       h="0.05rem"
       mx="auto"
+      w="50%"
+      mt="2rem"
+      mb="2rem"
     ></Flex>
   );
 };
