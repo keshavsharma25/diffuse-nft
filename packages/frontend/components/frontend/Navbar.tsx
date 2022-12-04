@@ -1,7 +1,6 @@
 import { Box, Flex, Heading, Image, Link } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import React from "react";
-import { isBoxedPrimitive } from "util/types";
+import NextLink from "next/link";
 
 type Props = {};
 
@@ -26,7 +25,8 @@ export function Navbar({}: Props) {
           fontWeight={"extrabold"}
         >
           <Link
-            href="#"
+            as={NextLink}
+            href="/"
             _hover={{
               textDecoration: "none",
             }}
