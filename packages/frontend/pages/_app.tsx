@@ -7,7 +7,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 // Imports
 import { chain, createClient, WagmiConfig, configureChains } from "wagmi";
-import { alchemyProvider } from "wagmi/providers/alchemy";
+import { infuraProvider } from "wagmi/providers/infura";
 import { publicProvider } from "wagmi/providers/public";
 
 import "@rainbow-me/rainbowkit/styles.css";
@@ -20,8 +20,7 @@ import {
 import { useIsMounted } from "../hooks";
 
 // Get environment variables
-const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID as string;
-// const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string;
+const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string;
 
 const hardhatChain: Chain = {
   id: 31337,
@@ -40,11 +39,11 @@ const hardhatChain: Chain = {
 
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum, hardhatChain],
-  [alchemyProvider({ apiKey: alchemyId }), publicProvider()]
+  [infuraProvider({ apiKey: infuraId }), publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "create-web3",
+  appName: "DiffuseNFT",
   chains,
 });
 
