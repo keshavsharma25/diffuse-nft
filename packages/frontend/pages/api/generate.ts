@@ -6,35 +6,25 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const myHeaders = new Headers();
-
-  myHeaders.append(
-    "Authorization",
-    ("Token " + process.env.NEXT_PUBLIC_REPLICATE_API_KEY) as string
-  );
-  myHeaders.append("Content-Type", "application/json");
-
-  const raw = JSON.stringify({
-    version: "27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478",
-    input: {
-      prompt: req.body.prompt,
-      seed: 42,
-    },
-  });
-
-  const requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
+  const headers = {
+    Authorization: "Token " + process.env.NEXT_PUBLIC_REPLICATE_API_KEY,
+    "Content-Type": "application/json",
   };
+
+  const url = "https://api.replicate.com/v1/predictions";
 
   try {
     const data = await (
-      await fetch(
-        "https://api.replicate.com/v1/predictions",
-        requestOptions as any
-      )
+      await fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({
+          version:
+            "f178fa7a1ae43a9a9af01b833b9d2ecf97b1bcb0acfd2dc5dd04895e042863f1",
+          input: { prompt: req.body.prompt },
+        }),
+        redirect: "follow",
+      })
     ).json();
 
     if (data.details) {
@@ -51,14 +41,16 @@ export default async function handler(
     } else {
       res.status(500).json({
         status: "error",
-        items: ["Something went wrong"],
+        items: [data],
       });
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      status: "error",
-      items: ["Something went wrong"],
-    });
+    if (error instanceof Error) {
+      res.status(500).json({
+        status: "error",
+        items: [error.message],
+      });
+    }
   }
 }
