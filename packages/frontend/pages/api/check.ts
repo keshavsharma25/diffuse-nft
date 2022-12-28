@@ -7,49 +7,60 @@ export default async function handler(
 ) {
   setTimeout(async () => {}, 5000);
 
-  const newHeaders = new Headers();
-  newHeaders.append(
-    "Authorization",
-    ("Token " + process.env.NEXT_PUBLIC_REPLICATE_API_KEY) as string
-  );
-
-  const newRequestOptions = {
-    method: "GET",
-    headers: newHeaders,
-    redirect: "follow",
+  const headers = {
+    Authorization: "Token " + process.env.NEXT_PUBLIC_REPLICATE_API_KEY,
+    "Content-Type": "application/json",
   };
 
   try {
+    console.log("id inside check.ts", req.query.id);
+
     const checkReplicate = await (
-      await fetch(
-        `https://api.replicate.com/v1/predictions/${req.query.id}`,
-        newRequestOptions as any
-      )
+      await fetch(`https://api.replicate.com/v1/predictions/${req.query.id}`, {
+        method: "GET",
+        headers: headers,
+        redirect: "follow",
+      })
     ).json();
 
+    console.log("checkReplicate", checkReplicate);
+
     if (checkReplicate.status === "succeeded") {
-      res.status(200).json({
+      return res.status(200).json({
         id: checkReplicate.id,
-        status: "success",
+        status: "succeeded",
         items: checkReplicate.output,
       });
     } else if (checkReplicate.status === "processing") {
-      res.status(200).json({
+      return res.status(200).json({
         id: checkReplicate.id,
         status: "processing",
         items: [],
       });
+    } else if (checkReplicate.status === "failed") {
+      return res.status(500).json({
+        id: checkReplicate.id,
+        status: "failed",
+        items: [],
+      });
+    } else if (checkReplicate.status === "cancelled") {
+      return res.status(500).json({
+        id: checkReplicate.id,
+        status: "cancelled",
+        items: [],
+      });
     } else {
-      res.status(500).json({
-        id: "",
+      return res.status(500).json({
+        id: checkReplicate.id,
         status: "error",
-        items: ["Something went wrong"],
+        items: [],
       });
     }
   } catch (error) {
-    res.status(500).json({
-      status: "error",
-      items: ["Something went wrong"],
-    });
+    if (error instanceof Error) {
+      res.statusCode = 500;
+      res.end(JSON.stringify({ detail: error.message }));
+      return;
+    }
   }
 }
