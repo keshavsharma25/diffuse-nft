@@ -1,14 +1,13 @@
-import { Image, LinkBox, LinkOverlay } from "@chakra-ui/react";
-import React from "react";
+import { Box, Image } from "@chakra-ui/react";
 
-type Props = { imageUrl: string };
+type Props = { base64: string };
 
-export const ImageCard = (props: Props) => {
+export const ImageCard = ({ base64 }: Props) => {
+  const url = `data:image/png;base64,${base64}`;
+
   return (
-    <LinkBox>
-      <LinkOverlay>
-        <Image src={props.imageUrl} w="40rem" h="auto" />
-      </LinkOverlay>
-    </LinkBox>
+    <Box>
+      <Image src={url} alt="prompt image" />
+    </Box>
   );
 };
