@@ -1,10 +1,23 @@
-import { Box, Flex, Heading, Image, Link } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Image,
+  Link,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import NextLink from "next/link";
+import { ApiKeyModal } from "./ApiKeyModal";
 
-type Props = {};
+type Props = {
+  setApiKey: React.Dispatch<React.SetStateAction<string>>;
+};
 
-export function Navbar({}: Props) {
+export function Navbar({ setApiKey }: Props) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Flex
       flexDirection={"row"}
@@ -35,9 +48,18 @@ export function Navbar({}: Props) {
           </Link>
         </Heading>
       </Flex>
-      <Box pr={"2rem"}>
-        <ConnectButton />
-      </Box>
+      <Flex flexDirection={"row"} alignItems="center">
+        <Button onClick={onOpen}>Set API Key</Button>
+        <ApiKeyModal isOpen={isOpen} onClose={onClose} setApiKey={setApiKey} />
+
+        <Box pr={"2rem"}>
+          <ConnectButton
+            showBalance={false}
+            chainStatus="icon"
+            accountStatus="address"
+          />
+        </Box>
+      </Flex>
     </Flex>
   );
 }
