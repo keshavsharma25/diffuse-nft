@@ -5,24 +5,26 @@ import {
   OneClickHeading,
   Prompt,
 } from "@/components/frontend";
-import { Data } from "@/utils/types";
 import { Box, Skeleton } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import { ResponseType } from "@/utils/types";
 
 export default function Home() {
   const { address, connector, isConnected } = useAccount();
 
-  const [response, setResponse] = useState<Data | null>(null);
+  const [response, setResponse] = useState<ResponseType | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState<string>("");
 
   useEffect(() => {
     console.log("UseEffect: response is set to:", response);
-  }, [response]);
+    console.log("UseEffect: apiKey is set to:", apiKey);
+  }, [response, apiKey]);
 
   return (
     <>
-      <Navbar />
+      <Navbar setApiKey={setApiKey} />
       <OneClickHeading />
       <CustomDivider />
       {isConnected && (
@@ -34,11 +36,13 @@ export default function Home() {
         />
       )}
       <Box>
-        {response?.status === "succeeded"
-          ? response.items.map((item, index) => (
-              <ImageCard key={index} imageUrl={item} />
-            ))
-          : isLoading && <Skeleton width={"40rem"} height={"40rem"} />}
+        {!isLoading ? (
+          response?.items?.map((item, index) => (
+            <ImageCard key={index} base64={item.base64} />
+          ))
+        ) : (
+          <Skeleton height="100vh" />
+        )}
       </Box>
     </>
   );
