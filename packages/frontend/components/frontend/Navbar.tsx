@@ -48,15 +48,36 @@ export function Navbar({ setApiKey }: Props) {
           </Link>
         </Heading>
       </Flex>
-      <Flex flexDirection={"row"} alignItems="center">
-        <Button onClick={onOpen}>Set API Key</Button>
+      <Flex flexDirection={"row"} alignItems="center" gap="1rem">
+        <Button
+          onClick={onOpen}
+          color="blackAlpha.800"
+          fontFamily="body"
+          fontWeight="bold"
+          bgColor="white"
+          shadow="md"
+          borderRadius="0.7rem"
+          _hover={{
+            bgColor: "white",
+            color: "blackAlpha.800",
+            fontFamily: "body",
+            fontWeight: "bold",
+            transform: "scale(1.01)",
+          }}
+          _active={{
+            bgColor: "white",
+            color: "blackAlpha.800",
+          }}
+        >
+          Set API Key
+        </Button>
         <ApiKeyModal isOpen={isOpen} onClose={onClose} setApiKey={setApiKey} />
 
         <Box pr={"2rem"}>
           <ConnectButton
+            accountStatus="address"
             showBalance={false}
             chainStatus="icon"
-            accountStatus="address"
           />
         </Box>
       </Flex>
