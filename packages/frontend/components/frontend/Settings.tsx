@@ -1,9 +1,8 @@
+import { initialSettingsState } from "@/utils/initialState";
 import { SDConfig } from "@/utils/types";
 import { Box, Collapse, Flex } from "@chakra-ui/react";
-import { OptionsSliderText } from "./OptionsSliderText";
-import { initialSettingsState } from "@/utils/initialState";
 import { OptionsSelect } from "./OptionsSelect";
-import { useEffect } from "react";
+import { OptionsSliderText } from "./OptionsSliderText";
 
 type Props = {
   isOpen: boolean;
@@ -118,7 +117,14 @@ export const Settings = ({ isOpen, settings, dispatch }: Props) => {
               defaultValue={initialSettingsState.cfg_scale}
               dispatch={dispatch}
             />
-
+            <OptionsSliderText
+              optionsTitle="Weight"
+              min={-1}
+              max={1}
+              step={0.1}
+              defaultValue={initialSettingsState.weight}
+              dispatch={dispatch}
+            />
             <OptionsSelect
               optionsTitle="Clip Guidance Preset"
               selectValues={clipGuidancePresetOptions}
