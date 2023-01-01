@@ -9,4 +9,5 @@ export const initialSettingsState: SDConfig = {
   samples: 1,
   seed: 0,
   steps: 50,
+  weight: 1,
 };
