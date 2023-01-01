@@ -9,6 +9,7 @@ type Props = {
   setResponse: React.Dispatch<React.SetStateAction<ResponseType | null>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isLoading: boolean;
+  apiKey: string;
 };
 
 export const SettingsContext = React.createContext({});
@@ -18,6 +19,7 @@ export const Prompt = ({
   setResponse,
   setIsLoading,
   isLoading,
+  apiKey,
 }: Props) => {
   const [prompt, setPrompt] = useState<string>("");
   const { isOpen, onToggle } = useDisclosure();
@@ -36,15 +38,15 @@ export const Prompt = ({
     setIsLoading(true);
 
     const body = {
-      cfg_scale: 7,
-      clip_guidance_preset: "FAST_BLUE",
-      height: 512,
-      width: 512,
-      samples: 2,
-      steps: 50,
+      cfg_scale: settings.cfg_scale,
+      clip_guidance_preset: settings.clip_guidance_preset,
+      height: settings.height,
+      width: settings.width,
+      samples: settings.samples,
+      steps: settings.steps,
       prompt: prompt,
-      weight: 1,
-      apiKey: "sk-QRQpA5O40FeUG33OfENFxJqjyORAUSZXmrBpKmujbEF0faIs",
+      weight: settings.weight,
+      apiKey: apiKey,
     };
 
     const options = {
