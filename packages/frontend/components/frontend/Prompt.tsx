@@ -1,26 +1,8 @@
 import { ResponseType } from "@/utils/types";
-import { Button, Flex, Input } from "@chakra-ui/react";
-import { useState } from "react";
-
-interface SDConfig {
-  cfg_scale: number;
-  clip_guidance_preset:
-    | "NONE"
-    | "FAST_BLUE"
-    | "FAST_GREEN"
-    | "NONE"
-    | "SIMPLE"
-    | "SLOW"
-    | "SLOWER"
-    | "SLOWEST";
-  height: number;
-  width: number;
-  samples: number;
-  seed: number;
-  steps: number;
-  prompt: string;
-  apiKey: string;
-}
+import { Box, Button, Flex, Input, useDisclosure } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { useSettings } from "@/hooks";
+import { Settings } from "./Settings";
 
 type Props = {
   response: ResponseType | null;
@@ -29,6 +11,8 @@ type Props = {
   isLoading: boolean;
 };
 
+export const SettingsContext = React.createContext({});
+
 export const Prompt = ({
   response,
   setResponse,
@@ -36,6 +20,12 @@ export const Prompt = ({
   isLoading,
 }: Props) => {
   const [prompt, setPrompt] = useState<string>("");
+  const { isOpen, onToggle } = useDisclosure();
+  const [settings, dispatch] = useSettings();
+
+  useEffect(() => {
+    console.log("UseEffect: settings is set to:", settings);
+  }, [settings]);
 
   const handlePrompt = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPrompt(e.target.value);
@@ -99,23 +89,43 @@ export const Prompt = ({
   };
 
   return (
-    <Flex alignItems={"center"} justifyContent="center" pt={"2rem"}>
-      <Input
-        placeholder="Enter a prompt"
-        size="lg"
-        w="45%"
-        focusBorderColor={"grey"}
-        onChange={handlePrompt}
-      />
-      {!isLoading ? (
-        <Button size={"lg"} type="submit" onClick={onSubmit}>
-          Enter
+    <>
+      <Flex alignItems="center" justifyContent="center" pt="1rem" gap="0.5rem">
+        <Input
+          placeholder="Enter a prompt"
+          size="lg"
+          w="45%"
+          focusBorderColor={"grey"}
+          onChange={handlePrompt}
+        />
+        {!isLoading ? (
+          <Button
+            size="lg"
+            type="submit"
+            bgColor="black"
+            color="white"
+            onClick={onSubmit}
+          >
+            Enter
+          </Button>
+        ) : (
+          <Button size="lg" type="submit" isLoading disabled>
+            Enter
+          </Button>
+        )}
+        <Button
+          size="lg"
+          onClick={onToggle}
+          border="1px"
+          backgroundColor="white"
+        >
+          Options
         </Button>
-      ) : (
-        <Button size={"lg"} type="submit" isLoading disabled>
-          Enter
-        </Button>
-      )}
-    </Flex>
+      </Flex>
+
+      <Box>
+        <Settings isOpen={isOpen} settings={settings} dispatch={dispatch} />
+      </Box>
+    </>
   );
 };
