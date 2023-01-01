@@ -1,4 +1,4 @@
-import { Box, Flex, Select, Text } from "@chakra-ui/react";
+import { Flex, Select, Text } from "@chakra-ui/react";
 import React from "react";
 
 type Props = {
@@ -17,7 +17,6 @@ export const OptionsSelect = ({
   defaultValue,
   dispatch,
 }: Props) => {
-  const valueRef = React.useRef<HTMLSelectElement>(null);
   const [value, setValue] = React.useState<string>(defaultValue);
 
   const HandleDispatchOptionsTitle = (value: string) => {
