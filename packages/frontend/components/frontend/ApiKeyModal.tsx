@@ -36,7 +36,7 @@ export const ApiKeyModal = ({ onClose, isOpen, setApiKey }: Props) => {
   };
 
   return (
-    <Modal onClose={onClose} isOpen={isOpen} isCentered>
+    <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Set your API Key</ModalHeader>
@@ -55,6 +55,7 @@ export const ApiKeyModal = ({ onClose, isOpen, setApiKey }: Props) => {
           to get an API key, and then follow the instructions to add it to your
           project. Thanks for understanding and for taking the time to set up
           your API key.
+          <br />
           <br />
           API Key:{" "}
           <Input
