@@ -33,6 +33,7 @@ export const ApiKeyModal = ({ onClose, isOpen, setApiKey }: Props) => {
 
   const onClick = () => {
     setApiKey(key);
+    onClose();
   };
 
   return (
