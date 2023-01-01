@@ -49,6 +49,8 @@ export const OptionsSliderText = ({
       dispatch({ type: "SET_SEED", payload: value });
     } else if (optionsTitle === "Steps") {
       dispatch({ type: "SET_STEPS", payload: value });
+    } else if (optionsTitle === "Weight") {
+      dispatch({ type: "SET_WEIGHT", payload: value });
     } else {
       console.log("Error: OptionsSliderText.tsx");
     }
@@ -62,9 +64,16 @@ export const OptionsSliderText = ({
   }, [value, inputRef]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = +e.target.value;
-    if (value >= min || value <= max) {
-      setValue(inputRef.current?.value ? +inputRef.current.value : 0);
+    if (inputRef.current) {
+      let value;
+      if (optionsTitle === "Weight") {
+        value = parseFloat(inputRef.current.value);
+      } else {
+        value = parseInt(inputRef.current.value);
+      }
+      if (value >= min || value <= max) {
+        setValue(value);
+      }
     }
   };
 
@@ -81,7 +90,7 @@ export const OptionsSliderText = ({
               min={min}
               type="number"
               max={max}
-              value={value === 0 && min !== 0 ? "" : value}
+              value={value === 0 && min > 0 ? "" : value}
               width="4rem"
               bgColor="whiteAlpha.900"
               borderColor="blackAlpha.700"
