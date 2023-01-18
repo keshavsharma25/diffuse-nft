@@ -35,14 +35,16 @@ export const OptionsSliderText = ({
 }: Props) => {
   const [value, setValue] = useState(defaultValue);
   const inputRef = useRef<HTMLInputElement>(null);
+  const labelStyles = {
+    mt: "2",
+    ml: "-1.5",
+    pt: "0.3",
+    fontSize: "0.8rem",
+  };
 
   const HandleDispatchOptionsTitle = (value: number) => {
     if (optionsTitle === "Config Scale") {
       dispatch({ type: "SET_CFG_SCALE", payload: value });
-    } else if (optionsTitle === "Height") {
-      dispatch({ type: "SET_HEIGHT", payload: value });
-    } else if (optionsTitle === "Width") {
-      dispatch({ type: "SET_WIDTH", payload: value });
     } else if (optionsTitle === "Samples") {
       dispatch({ type: "SET_SAMPLES", payload: value });
     } else if (optionsTitle === "Seed") {
@@ -58,27 +60,10 @@ export const OptionsSliderText = ({
 
   useEffect(() => {
     HandleDispatchOptionsTitle(value);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
   }, [value, inputRef]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (inputRef.current) {
-      let value;
-      if (optionsTitle === "Weight") {
-        value = parseFloat(inputRef.current.value);
-      } else {
-        value = parseInt(inputRef.current.value);
-      }
-      if (value >= min || value <= max) {
-        setValue(value);
-      }
-    }
-  };
-
   return (
-    <Flex flexDir="column" justifyContent="center" px="2rem" py="1rem">
+    <Flex flexDir="column" justifyContent="center" mx="1rem" py="1rem">
       <Flex alignItems="center" justifyContent="space-between" gap="2rem">
         <Text fontSize="1rem" fontWeight="semibold">
           {optionsTitle}
@@ -86,21 +71,20 @@ export const OptionsSliderText = ({
         <Flex>
           <Box>
             <Input
-              size="sm"
+              size="xs"
               min={min}
               type="number"
               max={max}
-              value={value === 0 && min > 0 ? "" : value}
-              width="4rem"
+              value={value}
+              width="2.5rem"
               bgColor="whiteAlpha.900"
               borderColor="blackAlpha.700"
-              onChange={handleInputChange}
               errorBorderColor="red.300"
               textAlign="center"
               borderLeftRadius="lg"
               borderRightRadius={isPixel ? "none" : "lg"}
-              isInvalid={value < min || value > max}
               ref={inputRef}
+              pointerEvents="none"
             />
           </Box>
           {isPixel && (
@@ -115,27 +99,35 @@ export const OptionsSliderText = ({
           )}
         </Flex>
       </Flex>
-      <Box pt="1rem" pb="1rem">
+      <Box pt="0.5rem">
         <Slider
           aria-label="slider-ex-6"
           min={min}
           defaultValue={defaultValue}
           value={value}
           onChange={(value) => {
-            setValue(value);
+            if (value >= min || value <= max) {
+              setValue(value);
+            }
           }}
           max={max}
           step={step}
         >
-          <SliderMark
-            value={min}
-            fontSize="0.75rem"
-            pt="0.5rem"
-            textAlign="right"
-          >
+          <SliderMark value={min} {...labelStyles}>
             {min}
           </SliderMark>
-          <SliderMark value={max} fontSize="0.75rem" pt="0.5rem">
+
+          {(min + max) % 2 === 0 ? (
+            <>
+              <SliderMark value={(min + max) / 2} {...labelStyles}>
+                {(min + max) / 2}
+              </SliderMark>
+            </>
+          ) : (
+            <></>
+          )}
+
+          <SliderMark value={max} {...labelStyles}>
             {max}
           </SliderMark>
 
