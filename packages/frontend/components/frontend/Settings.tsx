@@ -1,6 +1,6 @@
 import { initialSettingsState } from "@/utils/initialState";
 import { SDConfig } from "@/utils/types";
-import { Box, Collapse, Flex } from "@chakra-ui/react";
+import { Collapse, Flex, SimpleGrid, WrapItem } from "@chakra-ui/react";
 import { OptionsSelect } from "./OptionsSelect";
 import { OptionsSliderText } from "./OptionsSliderText";
 
@@ -38,106 +38,128 @@ const samplerOptions = [
   "K_LMS",
 ];
 
+const widthHeightOptions = [
+  "512x512",
+  "768x512",
+  "704x512",
+  "640x512",
+  "576x512",
+  "640x640",
+  "512x576",
+  "512x640",
+  "512x704",
+  "512x768",
+  "1280x768",
+  "768x1280",
+  "1024x1024",
+];
+
 export const Settings = ({ isOpen, settings, dispatch }: Props) => {
+  const selectOptions = [
+    {
+      optionsTitle: "Width x Height",
+      selectValues: widthHeightOptions,
+      defaultValue: `${initialSettingsState.width}x${initialSettingsState.height}`,
+      dispatch: dispatch,
+    },
+    {
+      optionsTitle: "Clip Guidance Preset",
+      selectValues: clipGuidancePresetOptions,
+      defaultValue: initialSettingsState.clip_guidance_preset,
+      dispatch: dispatch,
+    },
+    {
+      optionsTitle: "Sampler",
+      selectValues: samplerOptions,
+      defaultValue: initialSettingsState.sampler,
+      dispatch: dispatch,
+    },
+  ];
+
+  const sliderOptions = [
+    {
+      optionsTitle: "Samples",
+      defaultValue: initialSettingsState.samples,
+      min: 1,
+      max: 10,
+      step: 1,
+      dispatch: dispatch,
+    },
+    {
+      optionsTitle: "Steps",
+      defaultValue: initialSettingsState.steps,
+      min: 10,
+      max: 150,
+      step: 10,
+      dispatch: dispatch,
+    },
+    {
+      optionsTitle: "Seed",
+      defaultValue: initialSettingsState.seed,
+      min: 0,
+      max: 1000,
+      step: 1,
+      dispatch: dispatch,
+    },
+    {
+      optionsTitle: "Config Scale",
+      defaultValue: initialSettingsState.cfg_scale,
+      min: 0,
+      max: 35,
+      step: 1,
+      dispatch: dispatch,
+    },
+    {
+      optionsTitle: "Weight",
+      defaultValue: initialSettingsState.weight,
+      min: -1,
+      max: 1,
+      step: 0.1,
+      dispatch: dispatch,
+    },
+  ];
+
   return (
     <>
       <Collapse in={isOpen} animateOpacity>
-        <Flex
-          justifyContent="center"
-          flexDirection="column"
-          mx="15rem"
-          mt="1rem"
-          px="2rem"
-          bgColor="blackAlpha.200"
-          borderRadius="3xl"
-        >
-          <Box
-            fontSize="1.5rem"
-            fontWeight="semibold"
-            mb="1rem"
-            px="1rem"
-            pt="1rem"
-            alignSelf="center"
+        <Flex flexDirection="column" py="1rem" px="1rem">
+          <SimpleGrid
+            templateColumns={{
+              base: "repeat(1, 1fr)",
+              sm: "repeat(2, 1fr)",
+              md: "repeat(2, 1fr)",
+              lg: "repeat(3, 1fr)",
+              xl: "repeat(3, 1fr)",
+            }}
+            columnGap="0.5rem"
           >
-            Advanced Options
-          </Box>
-          <Flex
-            flexFlow="row wrap"
-            justifyContent="space-between"
-            columnGap="4rem"
-            rowGap="1rem"
-          >
-            <OptionsSliderText
-              optionsTitle="Height"
-              min={512}
-              max={2048}
-              step={2}
-              defaultValue={initialSettingsState.height}
-              dispatch={dispatch}
-              isPixel={true}
-            />
-            <OptionsSliderText
-              optionsTitle="Width"
-              min={512}
-              max={2048}
-              step={2}
-              defaultValue={initialSettingsState.width}
-              dispatch={dispatch}
-              isPixel={true}
-            />
-            <OptionsSliderText
-              optionsTitle="Samples"
-              min={1}
-              max={10}
-              step={1}
-              defaultValue={initialSettingsState.samples}
-              dispatch={dispatch}
-            />
-            <OptionsSliderText
-              optionsTitle="Steps"
-              min={10}
-              max={150}
-              step={10}
-              defaultValue={initialSettingsState.steps}
-              dispatch={dispatch}
-            />
-            <OptionsSliderText
-              optionsTitle="Seed"
-              min={0}
-              max={1000}
-              step={1}
-              defaultValue={initialSettingsState.seed}
-              dispatch={dispatch}
-            />
-            <OptionsSliderText
-              optionsTitle="Config Scale"
-              min={0}
-              max={35}
-              step={1}
-              defaultValue={initialSettingsState.cfg_scale}
-              dispatch={dispatch}
-            />
-            <OptionsSliderText
-              optionsTitle="Weight"
-              min={-1}
-              max={1}
-              step={0.1}
-              defaultValue={initialSettingsState.weight}
-              dispatch={dispatch}
-            />
-            <OptionsSelect
-              optionsTitle="Clip Guidance Preset"
-              selectValues={clipGuidancePresetOptions}
-              defaultValue={initialSettingsState.clip_guidance_preset}
-              dispatch={dispatch}
-            />
-            <OptionsSelect
-              optionsTitle="Sampler"
-              selectValues={samplerOptions}
-              defaultValue={initialSettingsState.sampler}
-              dispatch={dispatch}
-            />
-          </Flex>
+            {selectOptions.map((option) => {
+              return (
+                <WrapItem key={option.optionsTitle}>
+                  <OptionsSelect
+                    optionsTitle={option.optionsTitle}
+                    selectValues={option.selectValues}
+                    defaultValue={option.defaultValue}
+                    dispatch={option.dispatch}
+                  />
+                </WrapItem>
+              );
+            })}
+            {sliderOptions.map((option) => {
+              return (
+                <WrapItem key={option.optionsTitle}>
+                  <OptionsSliderText
+                    optionsTitle={option.optionsTitle}
+                    defaultValue={option.defaultValue}
+                    min={option.min}
+                    max={option.max}
+                    step={option.step}
+                    dispatch={option.dispatch}
+                  />
+                </WrapItem>
+              );
+            })}
+          </SimpleGrid>
         </Flex>
       </Collapse>
     </>
