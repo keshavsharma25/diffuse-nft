@@ -13,9 +13,10 @@ import { ApiKeyModal } from "./ApiKeyModal";
 
 type Props = {
   setApiKey: React.Dispatch<React.SetStateAction<string>>;
+  apiKey: string;
 };
 
-export function Navbar({ setApiKey }: Props) {
+export function Navbar({ setApiKey, apiKey }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -27,9 +28,9 @@ export function Navbar({ setApiKey }: Props) {
       pb={"1rem"}
       shadow={"md"}
     >
-      <Flex pl={"2rem"} alignItems={"center"}>
-        <Box border={"0.1rem"} borderColor={"black"}>
-          <Image src="favicon.ico" pr={"0.5rem"} borderRadius="1.5rem" />
+      <Flex gap="1rem" alignItems="center">
+        <Box ml="1rem">
+          <Image src="favicon.ico" borderRadius="100%" />
         </Box>
         <Heading
           size={"lg"}
@@ -44,7 +45,7 @@ export function Navbar({ setApiKey }: Props) {
               textDecoration: "none",
             }}
           >
-            Diffuse NFT
+            Ethereal Visions
           </Link>
         </Heading>
       </Flex>
@@ -71,9 +72,14 @@ export function Navbar({ setApiKey }: Props) {
         >
           Set API Key
         </Button>
-        <ApiKeyModal isOpen={isOpen} onClose={onClose} setApiKey={setApiKey} />
+        <ApiKeyModal
+          isOpen={isOpen}
+          onClose={onClose}
+          setApiKey={setApiKey}
+          apiKey={apiKey}
+        />
 
-        <Box pr={"2rem"}>
+        <Box mr={"2rem"}>
           <ConnectButton
             accountStatus="address"
             showBalance={false}
