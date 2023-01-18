@@ -17,10 +17,11 @@ import React, { useEffect } from "react";
 type Props = {
   onClose: () => void;
   isOpen: boolean;
+  apiKey: string;
   setApiKey: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const ApiKeyModal = ({ onClose, isOpen, setApiKey }: Props) => {
+export const ApiKeyModal = ({ onClose, isOpen, setApiKey, apiKey }: Props) => {
   const [key, setKey] = React.useState<string>("");
 
   const handleKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
