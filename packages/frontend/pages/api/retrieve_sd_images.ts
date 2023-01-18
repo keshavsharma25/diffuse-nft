@@ -1,12 +1,4 @@
-import {
-  createReadStream,
-  createWriteStream,
-  writeFile,
-  writeFileSync,
-} from "fs";
 import type { NextApiRequest, NextApiResponse } from "next";
-import path from "path";
-import { Readable } from "stream";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const engineId = "stable-diffusion-512-v2-0";
