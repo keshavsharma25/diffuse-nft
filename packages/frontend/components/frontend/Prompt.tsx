@@ -146,6 +146,7 @@ export const Prompt = ({
             base: "100%",
             md: "50%",
           }}
+          position="relative"
         >
           <Flex
             border="1px solid gray"
@@ -153,6 +154,14 @@ export const Prompt = ({
             {...(isOpen
               ? { borderTopLeftRadius: "1rem" }
               : { borderLeftRadius: "1rem" })}
+            {...(isOpen
+              ? {}
+              : {
+                  borderBottomRightRadius: {
+                    base: "1rem",
+                    md: "0rem",
+                  },
+                })}
             overflow="hidden"
             roundedTopRight={{
               base: "1rem",
@@ -210,6 +219,7 @@ export const Prompt = ({
           </Flex>
           <Box
             width="100%"
+            bgColor="white"
             borderX="1px solid gray"
             {...(isOpen
               ? {
@@ -217,6 +227,10 @@ export const Prompt = ({
                   borderBottomRadius: "1rem",
                 }
               : {})}
+            position="absolute"
+            top="42px"
+            left="0"
+            zIndex="10"
           >
             <Settings isOpen={isOpen} settings={settings} dispatch={dispatch} />
           </Box>
