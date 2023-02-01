@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelincontracts\tokenERC721ERC721.sol";
 
 contract DynamicNFT is ERC721 {
     // The name of the NFT
@@ -32,7 +32,10 @@ contract DynamicNFT is ERC721 {
     // Function to update the data for an existing NFT
     function updateData(uint256 _tokenId, string memory _data) public {
         // Only the owner of the NFT can update the data
-        require(_ownerOf(_tokenId) == msg.sender, "Only the owner can update the data for an NFT");
+        require(
+            _ownerOf(_tokenId) == msg.sender,
+            "Only the owner can update the data for an NFT"
+        );
 
         // Update the data for the NFT
         tokenData[_tokenId] = _data;
@@ -50,4 +53,3 @@ contract DynamicNFT is ERC721 {
         return _ownerOf(_tokenId);
     }
 }
-
