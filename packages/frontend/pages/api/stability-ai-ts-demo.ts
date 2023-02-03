@@ -1,24 +1,30 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import Generation from "@/utils/stability-ai-gen/generation_pb";
+import Generation, {
+  DiffusionSamplerMap,
+} from "@/utils/stability-ai-gen/generation_pb";
 import GenerationService from "@/utils/stability-ai-gen/generation_pb_service";
 import { grpc } from "@improbable-eng/grpc-web";
 import { NodeHttpTransport } from "@improbable-eng/grpc-web-node-http-transport";
 import fs from "fs/promises";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 grpc.setDefaultTransport(NodeHttpTransport());
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const body = req.body;
+
   // Set up image parameters
   const imageParams = new Generation.ImageParameters();
-  imageParams.setWidth(512);
-  imageParams.setHeight(512);
-  // imageParams.addSeed(1234);
-  imageParams.setSamples(1);
-  imageParams.setSteps(50);
+  imageParams.setWidth(body.width);
+  imageParams.setHeight(body.height);
+  imageParams.addSeed(body.seed);
+  imageParams.setSamples(body.samples);
+  imageParams.setSteps(body.steps);
 
-  // Use the `k-dpmpp-2` sampler
+  // Setup Sampler
   const transformType = new Generation.TransformType();
-  transformType.setDiffusion(Generation.DiffusionSampler.SAMPLER_K_DPMPP_2M);
+  transformType.setDiffusion(
+    body.sampler as DiffusionSamplerMap[keyof DiffusionSamplerMap]
+  );
   imageParams.setTransform(transformType);
 
   // Use Stable Diffusion 2.0
@@ -27,9 +33,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   request.setRequestedType(Generation.ArtifactType.ARTIFACT_IMAGE);
   request.setClassifier(new Generation.ClassifierParameters());
 
-  // Use a CFG scale of `13`
+  // Use a CFG scale
   const samplerParams = new Generation.SamplerParameters();
-  samplerParams.setCfgScale(13);
+  samplerParams.setCfgScale(body.cfgScale);
 
   const stepParams = new Generation.StepParameter();
   const scheduleParameters = new Generation.ScheduleParameters();
@@ -44,18 +50,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // Set our text prompt
   const promptText = new Generation.Prompt();
-  promptText.setText(
-    "A dream of a distant galaxy, by Caspar David Friedrich, matte painting trending on artstation HQ"
-  );
+  promptText.setText(body.prompt);
 
   request.addPrompt(promptText);
 
   // Authenticate using your API key, don't commit your key to a public repository!
   const metadata = new grpc.Metadata();
-  metadata.set(
-    "Authorization",
-    "Bearer " + process.env.NEXT_PUBLIC_STABILITY_API
-  );
+  metadata.set("Authorization", "Bearer " + body.apiKey);
 
   // Create a generation client
   const generationClient = new GenerationService.GenerationServiceClient(
