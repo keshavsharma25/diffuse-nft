@@ -69,9 +69,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   let filename = "";
 
+  let base64List: string[] = [];
+
   // Set up a callback to handle data being returned
-  generation.on("data", (data) => {
-    data.getArtifactsList().forEach((artifact) => {
+  generation.on("data", async (data) => {
+    data.getArtifactsList().forEach(async (artifact) => {
       // Oh no! We were filtered by the NSFW classifier!
       if (
         artifact.getType() === Generation.ArtifactType.ARTIFACT_TEXT &&
@@ -93,8 +95,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       // Save the image to a file
       const buffer = Buffer.from(artifact.getBinary() as ArrayBufferLike);
       filename = `image-${seed}.png`;
+      base64List.push(buffer.toString("base64"));
 
-      fs.writeFile(filename, buffer);
+      await fs.writeFile(filename, buffer);
     });
   });
 
@@ -106,8 +109,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     );
   });
 
+  await new Promise((resolve) => generation.on("end", resolve));
+
   res.status(200).json({
     message: "Your image is being generated!",
+    images: base64List,
   });
 };
 
