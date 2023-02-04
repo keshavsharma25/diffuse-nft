@@ -1,4 +1,8 @@
 import { initialSettingsState } from "@/utils/initialState";
+import {
+  DiffusionSamplerMap,
+  GuidancePresetMap,
+} from "@/utils/stability-ai-gen/generation_pb";
 import { SDConfig } from "@/utils/types";
 import { Collapse, Flex, SimpleGrid, WrapItem } from "@chakra-ui/react";
 import { OptionsSelect } from "./OptionsSelect";
@@ -13,30 +17,29 @@ type Props = {
   }>;
 };
 
-const clipGuidancePresetOptions = [
-  "NONE",
-  "FAST_BLUE",
-  "FAST_GREEN",
-  "NONE",
-  "SIMPLE",
-  "SLOW",
-  "SLOWER",
-  "SLOWEST",
-];
+export const guidancePresetMap: GuidancePresetMap = {
+  GUIDANCE_PRESET_NONE: 0,
+  GUIDANCE_PRESET_SIMPLE: 1,
+  GUIDANCE_PRESET_FAST_BLUE: 2,
+  GUIDANCE_PRESET_FAST_GREEN: 3,
+  GUIDANCE_PRESET_SLOW: 4,
+  GUIDANCE_PRESET_SLOWER: 5,
+  GUIDANCE_PRESET_SLOWEST: 6,
+};
 
-const samplerOptions = [
-  "NONE",
-  "DDIM",
-  "DDPM",
-  "K_DPMPP_2M",
-  "K_DPMPP_2S_ANCESTRAL",
-  "K_DPM_2",
-  "K_DPM_2_ANCESTRAL",
-  "K_EULER",
-  "K_EULER_ANCESTRAL",
-  "K_HEUN",
-  "K_LMS",
-];
+export const samplerMap: DiffusionSamplerMap = {
+  SAMPLER_DDIM: 0,
+  SAMPLER_DDPM: 1,
+  SAMPLER_K_EULER: 2,
+  SAMPLER_K_EULER_ANCESTRAL: 3,
+  SAMPLER_K_HEUN: 4,
+  SAMPLER_K_DPM_2: 5,
+  SAMPLER_K_DPM_2_ANCESTRAL: 6,
+  SAMPLER_K_LMS: 7,
+  SAMPLER_K_DPMPP_2S_ANCESTRAL: 8,
+  SAMPLER_K_DPMPP_2M: 9,
+  SAMPLER_K_DPMPP_SDE: 10,
+};
 
 const widthHeightOptions = [
   "512x512",
@@ -64,13 +67,13 @@ export const Settings = ({ isOpen, settings, dispatch }: Props) => {
     },
     {
       optionsTitle: "Clip Guidance Preset",
-      selectValues: clipGuidancePresetOptions,
+      selectValues: Object.keys(guidancePresetMap),
       defaultValue: initialSettingsState.clip_guidance_preset,
       dispatch: dispatch,
     },
     {
       optionsTitle: "Sampler",
-      selectValues: samplerOptions,
+      selectValues: Object.keys(samplerMap),
       defaultValue: initialSettingsState.sampler,
       dispatch: dispatch,
     },

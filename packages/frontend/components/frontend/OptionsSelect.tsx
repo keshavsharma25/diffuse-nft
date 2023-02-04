@@ -4,7 +4,7 @@ import React from "react";
 type Props = {
   optionsTitle: string;
   selectValues: string[];
-  defaultValue: string;
+  defaultValue: number | string;
   dispatch: React.Dispatch<{
     type: string;
     payload: any;
@@ -17,16 +17,24 @@ export const OptionsSelect = ({
   defaultValue,
   dispatch,
 }: Props) => {
-  const [value, setValue] = React.useState<string>(defaultValue);
+  const [value, setValue] = React.useState<string | number>(defaultValue);
 
-  const HandleDispatchOptionsTitle = (value: string) => {
+  const HandleDispatchOptionsTitle = (value: string | number) => {
     if (optionsTitle === "Clip Guidance Preset") {
       dispatch({ type: "SET_CLIP_GUIDANCE_PRESET", payload: value });
     } else if (optionsTitle === "Sampler") {
       dispatch({ type: "SET_SAMPLER", payload: value });
     } else if (optionsTitle === "Width x Height") {
-      dispatch({ type: "SET_WIDTH", payload: parseInt(value.split("x")[0]) });
-      dispatch({ type: "SET_HEIGHT", payload: parseInt(value.split("x")[1]) });
+      dispatch({
+        type: "SET_WIDTH",
+        payload:
+          typeof value === "string" ? parseInt(value.split("x")[0]) : value,
+      });
+      dispatch({
+        type: "SET_HEIGHT",
+        payload:
+          typeof value === "string" ? parseInt(value.split("x")[0]) : value,
+      });
     } else {
       console.log("Error: OptionsSelect.tsx");
     }
