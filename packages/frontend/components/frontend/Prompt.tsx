@@ -58,12 +58,14 @@ export const Prompt = ({
     setIsLoading(true);
 
     const body = {
-      cfg_scale: settings.cfg_scale,
-      clip_guidance_preset: settings.clip_guidance_preset,
-      height: settings.height,
       width: settings.width,
+      height: settings.height,
+      seed: settings.seed,
       samples: settings.samples,
       steps: settings.steps,
+      sampler: settings.sampler,
+      cfg_scale: settings.cfg_scale,
+      guidance_preset: settings.clip_guidance_preset,
       prompt: prompt,
       apiKey: apiKey,
     };
@@ -77,7 +79,7 @@ export const Prompt = ({
     };
 
     try {
-      const res = await fetch("/api/retrieve_sd_images", options);
+      const res = await fetch("/api/gen_ai_images", options);
 
       if (!res.ok) {
         console.error(`Error: ${res.status} - ${res.statusText}`);
