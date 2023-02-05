@@ -10,20 +10,31 @@ import type { NextApiRequest, NextApiResponse } from "next";
 grpc.setDefaultTransport(NodeHttpTransport());
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const body = req.body;
+  const {
+    width,
+    height,
+    seed,
+    samples,
+    steps,
+    sampler,
+    cfgScale,
+    guidance_preset,
+    prompt,
+    apiKey,
+  } = req.body;
 
   // Set up image parameters
   const imageParams = new Generation.ImageParameters();
-  imageParams.setWidth(body.width);
-  imageParams.setHeight(body.height);
-  imageParams.addSeed(body.seed);
-  imageParams.setSamples(body.samples);
-  imageParams.setSteps(body.steps);
+  imageParams.setWidth(width);
+  imageParams.setHeight(height);
+  imageParams.addSeed(seed);
+  imageParams.setSamples(samples);
+  imageParams.setSteps(steps);
 
   // Setup Sampler
   const transformType = new Generation.TransformType();
   transformType.setDiffusion(
-    body.sampler as DiffusionSamplerMap[keyof DiffusionSamplerMap]
+    sampler as DiffusionSamplerMap[keyof DiffusionSamplerMap]
   );
   imageParams.setTransform(transformType);
 
@@ -35,7 +46,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // Use a CFG scale
   const samplerParams = new Generation.SamplerParameters();
-  samplerParams.setCfgScale(body.cfgScale);
+  samplerParams.setCfgScale(cfgScale);
 
   const stepParams = new Generation.StepParameter();
   const scheduleParameters = new Generation.ScheduleParameters();
@@ -43,6 +54,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // Set the schedule to `0`, this changes when doing an initial image generation
   stepParams.setScaledStep(0);
   stepParams.setSampler(samplerParams);
+  stepParams.setGuidance(guidance_preset);
   stepParams.setSchedule(scheduleParameters);
 
   imageParams.addParameters(stepParams);
@@ -50,13 +62,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // Set our text prompt
   const promptText = new Generation.Prompt();
-  promptText.setText(body.prompt);
+  promptText.setText(prompt);
 
   request.addPrompt(promptText);
 
   // Authenticate using your API key, don't commit your key to a public repository!
   const metadata = new grpc.Metadata();
-  metadata.set("Authorization", "Bearer " + body.apiKey);
+  metadata.set("Authorization", "Bearer " + apiKey);
 
   // Create a generation client
   const generationClient = new GenerationService.GenerationServiceClient(
