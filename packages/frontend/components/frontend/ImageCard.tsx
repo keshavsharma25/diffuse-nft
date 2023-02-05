@@ -1,11 +1,7 @@
 import { SDConfig } from "@/utils/types";
 import {
-  AspectRatio,
   Box,
   Button,
-  Center,
-  Collapse,
-  Divider,
   Flex,
   Image,
   Modal,
