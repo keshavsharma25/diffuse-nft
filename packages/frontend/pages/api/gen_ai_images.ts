@@ -2,6 +2,7 @@ import Generation, {
   DiffusionSamplerMap,
 } from "@/utils/stability-ai-gen/generation_pb";
 import GenerationService from "@/utils/stability-ai-gen/generation_pb_service";
+import { ItemType } from "@/utils/types";
 import { grpc } from "@improbable-eng/grpc-web";
 import { NodeHttpTransport } from "@improbable-eng/grpc-web-node-http-transport";
 import fs from "fs/promises";
@@ -54,7 +55,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // Set the schedule to `0`, this changes when doing an initial image generation
   stepParams.setScaledStep(0);
   stepParams.setSampler(samplerParams);
-  stepParams.setGuidance(guidance_preset);
+  // stepParams.setGuidance(guidance_preset);
   stepParams.setSchedule(scheduleParameters);
 
   imageParams.addParameters(stepParams);
@@ -81,7 +82,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   let filename = "";
 
-  let base64List: string[] = [];
+  let base64List: ItemType[] = [];
 
   // Set up a callback to handle data being returned
   generation.on("data", async (data) => {
@@ -107,7 +108,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       // Save the image to a file
       const buffer = Buffer.from(artifact.getBinary() as ArrayBufferLike);
       filename = `image-${seed}.png`;
-      base64List.push(buffer.toString("base64"));
+      base64List.push({
+        base64: buffer.toString("base64"),
+      } as ItemType);
 
       await fs.writeFile(filename, buffer);
     });
@@ -124,8 +127,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await new Promise((resolve) => generation.on("end", resolve));
 
   res.status(200).json({
-    message: "Your image is being generated!",
-    images: base64List,
+    status: "200",
+    items: base64List,
   });
 };
 
