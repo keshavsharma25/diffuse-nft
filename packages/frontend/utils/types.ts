@@ -21,6 +21,4 @@ export interface ResponseType {
 
 export interface ItemType {
   base64: string;
-  seed: number;
-  finishReason: string;
 }
