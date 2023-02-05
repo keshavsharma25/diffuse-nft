@@ -99,7 +99,7 @@ export const Prompt = ({
 
       const finalResponse: ResponseType = {
         status: status,
-        items: data.images,
+        items: data.items,
       };
 
       setResponse(finalResponse);
