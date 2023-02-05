@@ -112,14 +112,6 @@ export const Settings = ({ isOpen, settings, dispatch }: Props) => {
       step: 1,
       dispatch: dispatch,
     },
-    {
-      optionsTitle: "Weight",
-      defaultValue: initialSettingsState.weight,
-      min: -1,
-      max: 1,
-      step: 0.1,
-      dispatch: dispatch,
-    },
   ];
 
   return (

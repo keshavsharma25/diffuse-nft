@@ -65,7 +65,6 @@ export const Prompt = ({
       samples: settings.samples,
       steps: settings.steps,
       prompt: prompt,
-      weight: settings.weight,
       apiKey: apiKey,
     };
 

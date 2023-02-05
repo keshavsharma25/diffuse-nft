@@ -23,8 +23,6 @@ function reducer(
       return { ...state, seed: action.payload };
     case "SET_STEPS":
       return { ...state, steps: action.payload };
-    case "SET_WEIGHT":
-      return { ...state, weight: action.payload };
     default:
       return state;
   }

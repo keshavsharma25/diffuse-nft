@@ -9,7 +9,6 @@ export interface SDConfig {
   samples: number;
   seed: number;
   steps: number;
-  weight: number;
   prompt?: string;
   apiKey?: string;
 }

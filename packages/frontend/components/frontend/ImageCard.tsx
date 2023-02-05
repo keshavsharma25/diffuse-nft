@@ -136,7 +136,6 @@ export const ImageCard = ({ base64, prompt, settings }: Props) => {
                       <Text>Steps: {settings.steps}</Text>
                       <Text>Seed: {settings.seed}</Text>
                       <Text>cfg scale: {settings.cfg_scale}</Text>
-                      <Text>Weight: {settings.weight}</Text>
                     </Box>
                   </ModalHeader>
                 </Box>
