@@ -52,11 +52,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const stepParams = new Generation.StepParameter();
   const scheduleParameters = new Generation.ScheduleParameters();
 
+  // Set Guidance Preset
+  const guidancePresetParams = new Generation.GuidanceParameters();
+  guidancePresetParams.setGuidancePreset(guidance_preset);
+
   // Set the schedule to `0`, this changes when doing an initial image generation
   stepParams.setScaledStep(0);
   stepParams.setSampler(samplerParams);
-  // stepParams.setGuidance(guidance_preset);
   stepParams.setSchedule(scheduleParameters);
+  stepParams.setGuidance(guidancePresetParams);
 
   imageParams.addParameters(stepParams);
   request.setImage(imageParams);
@@ -110,6 +114,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       filename = `image-${seed}.png`;
       base64List.push({
         base64: buffer.toString("base64"),
+        seed: seed,
       } as ItemType);
 
       await fs.writeFile(filename, buffer);
