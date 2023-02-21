@@ -18,6 +18,7 @@ import {
 } from "@rainbow-me/rainbowkit";
 
 import { useIsMounted } from "../hooks";
+import { Layout } from "@/components/frontend";
 
 // Get environment variables
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string;
@@ -38,12 +39,12 @@ const hardhatChain: Chain = {
 };
 
 const { chains, provider } = configureChains(
-  [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum, hardhatChain],
+  [chain.mainnet, chain.polygonMumbai, chain.polygon, hardhatChain],
   [infuraProvider({ apiKey: infuraId }), publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "DiffuseNFT",
+  appName: "Ethereal Visions",
   chains,
 });
 
@@ -60,9 +61,11 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider coolMode chains={chains}>
-        <NextHead>
-          <title>DiffuseNFT</title>
-        </NextHead>
+        <Layout>
+          <NextHead>
+            <title>Ethereal Visions</title>
+          </NextHead>
+        </Layout>
         <ChakraProvider>
           <Component {...pageProps} />
         </ChakraProvider>
