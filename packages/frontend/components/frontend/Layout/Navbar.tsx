@@ -1,11 +1,4 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Image,
-  Link,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Flex, Image, Link, useDisclosure } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import NextLink from "next/link";
 
@@ -21,7 +14,9 @@ export function Navbar({}: Props) {
       justifyContent="space-between"
       pt="1rem"
       pb="1rem"
-      shadow="md"
+      style={{
+        boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)",
+      }}
     >
       <Flex gap="0.1rem" justifyContent="center" alignItems="center">
         <Box>

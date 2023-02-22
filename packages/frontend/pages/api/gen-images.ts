@@ -1,23 +1,21 @@
+import { openai } from "@/utils/openai";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { CreateImageRequest } from "openai";
-import { openai } from "@/utils/openai";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { prompt, n, size, response_format, user } = req.body;
 
-  const requestOptions: CreateImageRequest = {
-    prompt,
-    n,
-    size,
-    response_format,
-    user,
-  };
-
   try {
-    const response = await openai.createImage(requestOptions);
+    const response = await openai.createImage({
+      prompt: prompt,
+      n: n,
+      size: size,
+      response_format: response_format,
+    } as CreateImageRequest);
     res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({ error });
+    console.error(error);
+    // res.status(500).json({ error: error });
   }
 };
 
