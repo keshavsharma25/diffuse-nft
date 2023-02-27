@@ -62,3 +62,6 @@ yarn-error.log\*
 
 .vercel
 packages/backend/yarn-error.log
+
+# vscode
+.vscode
