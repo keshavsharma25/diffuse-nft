@@ -1,2 +1,2 @@
 export { Layout } from "./Layout/Layout";
-export { Prompt } from "./Prompt";
+export { Prompt, Display } from "./Create";
